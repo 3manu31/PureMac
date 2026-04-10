@@ -54,11 +54,7 @@ Download the latest `.app` from [Releases](https://github.com/momenbasel/PureMac
 
 > Signed and notarized with Apple Developer ID - installs without security warnings.
 
-### Mac App Store
 
-<a href="https://apps.apple.com/app/puremac/id6761837287">
-  <img src="https://developer.apple.com/assets/elements/badges/download-on-the-mac-app-store.svg" alt="Download on the Mac App Store" height="48">
-</a>
 
 ### Build from source
 
