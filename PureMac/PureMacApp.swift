@@ -15,6 +15,12 @@ struct PureMacApp: App {
     @StateObject private var appState = AppState()
     @AppStorage("PureMac.OnboardingComplete") private var onboardingComplete = false
 
+    init() {
+        if CommandLine.arguments.count > 1 {
+            CLI.run()
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             if onboardingComplete {

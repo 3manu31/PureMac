@@ -33,10 +33,12 @@
 		E60B0A2C5D0A6CAE35BF4DFB /* Locations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D3D9A9BC52839E6D0A22BC /* Locations.swift */; };
 		EDEF28CAD23E936FBED1783B /* PureMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63581B70F9B10231964E3602 /* PureMacApp.swift */; };
 		F1F506C146E17D6CEC4A12F3 /* AppInfoFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23486A54A82EE3865B784D1C /* AppInfoFetcher.swift */; };
+		F2FA881A4B2209CC2A6342FB /* CLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B2C5F66B6D812572BD4F05 /* CLI.swift */; };
 		FDA30FE6349CA01C8D859F04 /* OrphanListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B71E8F62DB76D85F41F9A2E9 /* OrphanListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01B2C5F66B6D812572BD4F05 /* CLI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLI.swift; sourceTree = "<group>"; };
 		02E502E2B5C6AECC76E5CFEF /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		10B0AF194677EAC1D5568785 /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
 		11BA091943263913276F3CCF /* SmartScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartScanView.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 		E05E733EFBC4EFDA12BEC43B /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				01B2C5F66B6D812572BD4F05 /* CLI.swift */,
 				5785762276FB5E3209C6DE4D /* Logger.swift */,
 			);
 			path = Utilities;
@@ -308,6 +311,7 @@
 				75B5F0401D37F2872B1AD85A /* AppListView.swift in Sources */,
 				9BB5AAA574AFED6C27A3F8E2 /* AppPathFinder.swift in Sources */,
 				9AA80E035DF7B33F6EE118DF /* AppState.swift in Sources */,
+				F2FA881A4B2209CC2A6342FB /* CLI.swift in Sources */,
 				B52938BBD11842631314543D /* CategoryDetailView.swift in Sources */,
 				48D1431A7C99C19EEBDB056B /* CleaningEngine.swift in Sources */,
 				8947F0CE448791BD50EECF46 /* Conditions.swift in Sources */,
