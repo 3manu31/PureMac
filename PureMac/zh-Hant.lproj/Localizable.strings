@@ -83,6 +83,8 @@
 "Rescan" = "重新掃描";
 "%lld of %lld selected" = "已選 %lld / %lld";
 "Reveal in Finder" = "在 Finder 中顯示";
+"Copy Path" = "複製路徑";
+"Move to Trash" = "移到垃圾桶";
 
 /* Apps (AppListView) */
 "Search apps" = "搜尋應用程式";

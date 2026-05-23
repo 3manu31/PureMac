@@ -83,6 +83,8 @@
 "Rescan" = "Rescan";
 "%lld of %lld selected" = "%lld of %lld selected";
 "Reveal in Finder" = "Reveal in Finder";
+"Copy Path" = "Copy Path";
+"Move to Trash" = "Move to Trash";
 
 /* Apps (AppListView) */
 "Search apps" = "Search apps";

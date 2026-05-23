@@ -83,6 +83,8 @@
 "Rescan" = "Volver a analizar";
 "%lld of %lld selected" = "%lld de %lld seleccionados";
 "Reveal in Finder" = "Mostrar en el Finder";
+"Copy Path" = "Copiar ruta";
+"Move to Trash" = "Mover a la Papelera";
 
 /* Apps (AppListView) */
 "Search apps" = "Buscar apps";

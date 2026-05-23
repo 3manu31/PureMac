@@ -83,6 +83,8 @@
 "Rescan" = "再スキャン";
 "%lld of %lld selected" = "%lld / %lld 個を選択中";
 "Reveal in Finder" = "Finderで表示";
+"Copy Path" = "パスをコピー";
+"Move to Trash" = "ゴミ箱に移動";
 
 /* Apps (AppListView) */
 "Search apps" = "アプリを検索";

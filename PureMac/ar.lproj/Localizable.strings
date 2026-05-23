@@ -83,6 +83,8 @@
 "Rescan" = "إعادة الفحص";
 "%lld of %lld selected" = "%lld من %lld محدد";
 "Reveal in Finder" = "إظهار في Finder";
+"Copy Path" = "نسخ المسار";
+"Move to Trash" = "نقل إلى المهملات";
 
 /* Apps (AppListView) */
 "Search apps" = "بحث في التطبيقات";

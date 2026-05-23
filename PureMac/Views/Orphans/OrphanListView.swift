@@ -47,7 +47,15 @@ struct OrphanListView: View {
                     .toggleStyle(.checkbox)
                     .contextMenu {
                         Button("Reveal in Finder") {
-                            NSWorkspace.shared.selectFile(fileURL.path, inFileViewerRootedAtPath: "")
+                            revealInFinder(fileURL)
+                        }
+                        Button("Copy Path") {
+                            NSPasteboard.general.clearContents()
+                            NSPasteboard.general.setString(fileURL.path, forType: .string)
+                        }
+                        Divider()
+                        Button("Move to Trash", role: .destructive) {
+                            Task { await removeSingleOrphan(fileURL) }
                         }
                     }
                 }
@@ -202,6 +210,31 @@ struct OrphanListView: View {
 
             return .needsAdmin
         }
+    }
+
+    private func revealInFinder(_ url: URL) {
+        // activateFileViewerSelecting handles sandbox-bookmarked paths and
+        // missing files better than selectFile(_:inFileViewerRootedAtPath:),
+        // which silently no-ops when the path is unreachable from Finder's
+        // current scope. If the target itself was removed since the scan,
+        // fall back to opening the enclosing directory so the user lands
+        // somewhere useful instead of nothing happening.
+        let fm = FileManager.default
+        if fm.fileExists(atPath: url.path) {
+            NSWorkspace.shared.activateFileViewerSelecting([url])
+            return
+        }
+        let parent = url.deletingLastPathComponent()
+        if fm.fileExists(atPath: parent.path) {
+            NSWorkspace.shared.open(parent)
+        }
+    }
+
+    private func removeSingleOrphan(_ url: URL) async {
+        let previous = selectedOrphans
+        selectedOrphans = [url]
+        await removeSelectedOrphans()
+        selectedOrphans = previous.subtracting([url])
     }
 
     private func removeWithAdminPrivileges(_ urls: [URL]) -> Bool {
