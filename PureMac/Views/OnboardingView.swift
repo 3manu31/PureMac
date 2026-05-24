@@ -147,6 +147,8 @@ struct OnboardingView: View {
 
     private func advance(by delta: Int) {
         let target = max(0, min(Page.count - 1, page.index + delta))
+        guard target != page.index else { return }
+        Haptics.tap()
         withAnimation(.spring(response: 0.45, dampingFraction: 0.85)) {
             page = Page(rawValue: target) ?? page
         }
@@ -168,6 +170,7 @@ struct OnboardingView: View {
             withAnimation(.easeInOut(duration: 0.3)) {
                 hasFda = granted
             }
+            if granted { Haptics.success() }
         }
         // Auto-advance once they grant access while on the permission page.
         // The autoAdvanceScheduled latch prevents the 1-second poll from
@@ -324,8 +327,8 @@ private struct PermissionScene: View {
     let revealAppInFinder: () -> Void
 
     var body: some View {
-        VStack(spacing: 20) {
-            VStack(spacing: 10) {
+        VStack(spacing: 18) {
+            VStack(spacing: 8) {
                 Text(hasFda ? "Permission granted" : "One permission, then we're done")
                     .font(.system(size: 26, weight: .semibold))
                     .multilineTextAlignment(.center)
@@ -339,7 +342,7 @@ private struct PermissionScene: View {
             }
 
             FDADemoView()
-                .frame(maxWidth: 440)
+                .frame(maxWidth: 420)
 
             if hasFda {
                 Label("All set — moving you to the next step.", systemImage: "checkmark.circle.fill")
@@ -347,35 +350,51 @@ private struct PermissionScene: View {
                     .foregroundStyle(Tint.green)
                     .transition(.opacity.combined(with: .scale))
             } else {
-                VStack(spacing: 6) {
-                    Button {
-                        openSettings()
-                    } label: {
-                        Label(hasOpenedSettings ? "Reopen Settings" : "Open Settings & reveal PureMac",
-                              systemImage: "gear")
-                            .font(.system(size: 13, weight: .semibold))
-                            .frame(minWidth: 280)
-                            .padding(.vertical, 4)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .keyboardShortcut(.defaultAction)
+                // Two equally legitimate paths: open Settings and have it
+                // reveal PureMac in Finder, OR grab the draggable icon on the
+                // left and drop it directly into the FDA list. Showing both
+                // side by side lets users pick the path their mental model
+                // prefers without a 3-step decision tree.
+                HStack(alignment: .top, spacing: 18) {
+                    AppBundleDragHandle()
+                    Divider().frame(maxHeight: 90)
+                    VStack(spacing: 8) {
+                        Button {
+                            openSettings()
+                        } label: {
+                            Label(hasOpenedSettings ? "Reopen Settings" : "Open Settings & reveal PureMac",
+                                  systemImage: "gear")
+                                .font(.system(size: 13, weight: .semibold))
+                                .frame(minWidth: 240)
+                                .padding(.vertical, 2)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.large)
+                        .keyboardShortcut(.defaultAction)
 
-                    if hasOpenedSettings {
-                        HStack(spacing: 14) {
-                            Button("Reveal app again") { revealAppInFinder() }
+                        if hasOpenedSettings {
+                            HStack(spacing: 12) {
+                                Button("Reveal app again") { revealAppInFinder() }
+                                    .buttonStyle(.link)
+                                    .font(.system(size: 11.5))
+                                Button("Reset permissions") {
+                                    _ = FullDiskAccessManager.shared.resetFullDiskAccess()
+                                    FullDiskAccessManager.shared.triggerRegistration()
+                                }
                                 .buttonStyle(.link)
                                 .font(.system(size: 11.5))
-                            Button("Reset permissions") {
-                                _ = FullDiskAccessManager.shared.resetFullDiskAccess()
-                                FullDiskAccessManager.shared.triggerRegistration()
                             }
-                            .buttonStyle(.link)
-                            .font(.system(size: 11.5))
+                            .transition(.opacity)
+                        } else {
+                            Text("Tip: drag the icon on the left straight into the list.")
+                                .font(.system(size: 11))
+                                .foregroundStyle(.tertiary)
+                                .multilineTextAlignment(.center)
                         }
-                        .transition(.opacity)
                     }
+                    .frame(maxWidth: 260)
                 }
+                .padding(.top, 4)
             }
         }
     }
@@ -384,39 +403,62 @@ private struct PermissionScene: View {
 private struct ReadyScene: View {
     let hasFda: Bool
     @State private var bounce = false
+    @State private var fireConfetti = false
+    @AppStorage("PureMac.HasSeenWelcomeConfetti") private var hasSeenConfetti = false
 
     var body: some View {
-        VStack(spacing: 22) {
-            Spacer(minLength: 0)
-
-            ZStack {
-                Circle()
-                    .fill((hasFda ? Tint.green : Tint.orange).opacity(0.12))
-                    .frame(width: 110, height: 110)
-                Image(systemName: hasFda ? "checkmark" : "hand.wave.fill")
-                    .font(.system(size: 50, weight: .semibold))
-                    .foregroundStyle(hasFda ? Tint.green : Tint.orange)
-                    .scaleEffect(bounce ? 1.05 : 1.0)
+        ZStack {
+            // Confetti sits above the content but behind any touch targets;
+            // disabling hit-testing keeps the Start button clickable through
+            // falling particles.
+            if !hasSeenConfetti {
+                ConfettiView(trigger: fireConfetti)
+                    .allowsHitTesting(false)
             }
-            .onAppear {
-                withAnimation(.spring(response: 0.5, dampingFraction: 0.55)) {
-                    bounce = true
+
+            VStack(spacing: 22) {
+                Spacer(minLength: 0)
+
+                ZStack {
+                    Circle()
+                        .fill((hasFda ? Tint.green : Tint.orange).opacity(0.12))
+                        .frame(width: 110, height: 110)
+                    Image(systemName: hasFda ? "checkmark" : "hand.wave.fill")
+                        .font(.system(size: 50, weight: .semibold))
+                        .foregroundStyle(hasFda ? Tint.green : Tint.orange)
+                        .scaleEffect(bounce ? 1.05 : 1.0)
                 }
-            }
+                .onAppear {
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.55)) {
+                        bounce = true
+                    }
+                    // Fire the welcome confetti exactly once per install.
+                    // Subsequent onboarding re-entries (e.g. after a Reset)
+                    // get a clean ready scene without the celebration.
+                    guard !hasSeenConfetti else { return }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                        fireConfetti = true
+                        Haptics.success()
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                        hasSeenConfetti = true
+                    }
+                }
 
-            VStack(spacing: 10) {
-                Text(hasFda ? "You're ready" : "Ready when you are")
-                    .font(.system(size: 30, weight: .semibold))
-                Text(hasFda
-                     ? "Hit Start to run your first Smart Scan."
-                     : "Some features will be limited without Full Disk Access. You can grant it later in Settings.")
-                    .font(.system(size: 13.5))
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: 420)
-            }
+                VStack(spacing: 10) {
+                    Text(hasFda ? "You're ready" : "Ready when you are")
+                        .font(.system(size: 30, weight: .semibold))
+                    Text(hasFda
+                         ? "Hit Start to run your first Smart Scan."
+                         : "Some features will be limited without Full Disk Access. You can grant it later in Settings.")
+                        .font(.system(size: 13.5))
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: 420)
+                }
 
-            Spacer(minLength: 0)
+                Spacer(minLength: 0)
+            }
         }
     }
 }

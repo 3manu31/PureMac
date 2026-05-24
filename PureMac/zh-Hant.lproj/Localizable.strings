@@ -324,3 +324,9 @@
 "Skip" = "略過";
 "Start" = "開始";
 "Continue" = "繼續";
+
+/* Drag handle */
+"Drag to the Settings list" = "拖到設定清單";
+"Drag this icon into the Full Disk Access list in System Settings." = "將此圖示拖入系統設定中的完整磁碟存取清單。";
+"Tip: drag the icon on the left straight into the list." = "提示：把左側圖示直接拖入清單。";
+"Or drag the icon on the left straight into Settings." = "或者把左側圖示直接拖入設定。";

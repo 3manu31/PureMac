@@ -70,8 +70,6 @@ Most Mac cleaners are subscription apps that hide their disk usage behind a payw
 - **Honest scans.** "Junk" means actually-junk: cache directories the OS itself would purge, orphaned files left by apps you've already deleted, broken installer receipts, that 4 GB Xcode DerivedData blob from 2023.
 - **Real uninstalls.** Drag an app, see every preference plist, cache folder, container, launch agent and log file it dropped across your library, remove all of it at once.
 
-The goal is to leave behind software that respects the people running it long after the people who wrote it have moved on.
-
 ## What it does
 
 ### App Uninstaller

@@ -324,3 +324,9 @@
 "Skip" = "Skip";
 "Start" = "Start";
 "Continue" = "Continue";
+
+/* Drag handle */
+"Drag to the Settings list" = "Drag to the Settings list";
+"Drag this icon into the Full Disk Access list in System Settings." = "Drag this icon into the Full Disk Access list in System Settings.";
+"Tip: drag the icon on the left straight into the list." = "Tip: drag the icon on the left straight into the list.";
+"Or drag the icon on the left straight into Settings." = "Or drag the icon on the left straight into Settings.";

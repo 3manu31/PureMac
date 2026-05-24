@@ -724,6 +724,7 @@ final class AppState: ObservableObject {
 
             totalFreedSpace = result.freedSpace
             lastCleanedDate = Date()
+            if result.itemsCleaned > 0 { Haptics.success() }
 
             let survivors = itemsToClean.filter { !result.cleanedPaths.contains($0.path) }
 

@@ -83,19 +83,36 @@ struct PermissionSheet: View {
 
     private var requestBody: some View {
         VStack(alignment: .leading, spacing: 18) {
-            // Primary action — use the system's borderedProminent so the
-            // button feels native rather than like a marketing CTA.
-            Button {
-                coordinator.openSettingsAndReveal()
-            } label: {
-                Label("Open Settings & reveal PureMac", systemImage: "gear")
-                    .font(.system(size: 13, weight: .semibold))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 6)
+            // Two paths the user can choose between: drag the PureMac bundle
+            // straight into the FDA list, OR have us reveal it in Finder so
+            // they can drag from there. Drag-from-our-sheet is faster but
+            // some users will still prefer the Finder flow they recognize.
+            HStack(alignment: .center, spacing: 14) {
+                AppBundleDragHandle()
+
+                Divider().frame(maxHeight: 110)
+
+                VStack(spacing: 8) {
+                    Button {
+                        Haptics.tap()
+                        coordinator.openSettingsAndReveal()
+                    } label: {
+                        Label("Open Settings & reveal PureMac", systemImage: "gear")
+                            .font(.system(size: 13, weight: .semibold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .keyboardShortcut(.defaultAction)
+
+                    Text("Or drag the icon on the left straight into Settings.")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .keyboardShortcut(.defaultAction)
 
             // Step-by-step strip
             HStack(spacing: 0) {

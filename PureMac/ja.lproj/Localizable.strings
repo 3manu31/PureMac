@@ -324,3 +324,9 @@
 "Skip" = "スキップ";
 "Start" = "開始";
 "Continue" = "続ける";
+
+/* Drag handle */
+"Drag to the Settings list" = "設定のリストにドラッグ";
+"Drag this icon into the Full Disk Access list in System Settings." = "このアイコンをシステム設定のフルディスクアクセスのリストにドラッグしてください。";
+"Tip: drag the icon on the left straight into the list." = "ヒント: 左のアイコンをそのままリストにドラッグできます。";
+"Or drag the icon on the left straight into Settings." = "または左のアイコンをそのまま設定にドラッグしてください。";

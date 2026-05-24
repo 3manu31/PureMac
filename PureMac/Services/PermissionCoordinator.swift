@@ -174,6 +174,7 @@ final class PermissionCoordinator: ObservableObject {
         let callback = onGrantCallback
         onGrantCallback = nil
         stopPolling()
+        Haptics.success()
         // Cancel any prior pending grant work — guarantees the callback fires
         // at most once even if grant is detected twice in rapid succession
         // (e.g. immediate-read + first poll tick both fire).
